@@ -10,7 +10,7 @@ class Ranker:
 
 		term_count={}
 
-		#docs_union=[]
+		docs_union=[]
 
 		for term in query.split(' '):
 			if(term_count.get(term)==None):
@@ -18,11 +18,11 @@ class Ranker:
 			else:
 				term_count[term]+=1
 
-		#for term in query.split(' '):
-			#if(Index.index.get(term)!=None):
-				#docs_union+=Index.index[term]
+		for term in query.split(' '):
+			if(Index.index.get(term)!=None):
+				docs_union+=Index.index[term].keys()
 
-		for doc_id,doc in enumerate(docs):
+		for doc_id in docs_union:
 			sqr_wqt=0
 			sqr_wdt=0
 
@@ -68,13 +68,13 @@ class Ranker:
 					bi_term_count[bi_term]=1
 
 
-			docs_union=docs
+			docs_union=[]
 
-			#for bi_term in zip(query.split(" ")[:-1], query.split(" ")[1:]):
-			#	if(Bi_index.bi_index.get(bi_term)!=None):
-			#		docs_union+=Bi_index.bi_index[bi_term]
+			for bi_term in zip(query.split(" ")[:-1], query.split(" ")[1:]):
+				if(Bi_index.bi_index.get(bi_term)!=None):
+					docs_union+=Bi_index.bi_index[bi_term].keys()
 
-			for doc_id,doc in enumerate(docs_union):
+			for doc_id in docs_union:
 				sqr_wqt=0
 				sqr_wdt=0
 				score_d=0

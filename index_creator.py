@@ -42,6 +42,7 @@ class Docs:
 		doc=""
 		doc_status=0
 		len_docs=len(docs)
+		doc_id=0
 
 		for i in tqdm(range(0,len_docs)):
 			if(doc_status==0 and docs[i]=='<' and docs[i+1]=='d' and docs[i+2]=='o' and docs[i+3]=='c'):
@@ -51,8 +52,9 @@ class Docs:
 			if(doc_status==1 and docs[i]=='<' and docs[i+1]=='/' and docs[i+2]=='d' and docs[i+3]=='o' and docs[i+4]=='c' and docs[i+5]=='>'):
 				doc=doc+"</doc>"
 				doc=self.clean_doc(doc)
-				self.push(nlp(doc))
+				self.push((doc_id,nlp(doc)))
 				self.num_docs+=1
+				doc_id+=1
 				doc_status=0
 				doc=""
 
@@ -63,7 +65,7 @@ class Docs:
 		return self.docs
 
 	def get_doc(self,doc_id):
-		return self.docs[doc_id]
+		return self.docs[doc_id][1]
 
 class Index:
 	def __init__(self):
@@ -75,7 +77,7 @@ class Index:
 
 	def generate_index(self,Doc):
 		#function to generate the inverted index
-		for doc_id,doc in enumerate(Doc.docs):
+		for doc_id,doc in Doc.docs:
 			#print("Doc ID: ",doc_id)
 			for token in doc:
 				if(self.index.get(token.text)!=None):
@@ -111,7 +113,7 @@ class Bi_Index:
 
 	def generate_bi_index(self,Doc):
 		#function to generate the inverted index
-		for doc_id,doc in enumerate(Doc.docs):
+		for doc_id,doc in Doc.docs:
 			len_doc=len(doc)
 			for bi_term in zip(doc[0:-1],doc[1:]):
 				if(self.bi_index.get((bi_term[0].text,bi_term[1].text))!=None):

@@ -6,7 +6,7 @@ from operator import itemgetter
 def main():
 	D=idx.Docs()
 	
-	D.populate("wiki_09_AN")
+	D.populate("wiki_09_AN TRIAL")
 
 	index=idx.Index()
 
@@ -31,9 +31,6 @@ def main():
 			scores_list=sorted(scores.items(), key=itemgetter(1), reverse= True)
 
 			k=int(input("Enter Number of Documents Desired: "))
-
-
-			#print(scores_list)
 
 			for doc_id,score in scores_list[0:k]:
 				print(doc_id,"    ",score)
