@@ -50,6 +50,8 @@ class Ranker:
 
 	def rank_advance(self,Index,Bi_index,query,type):
 
+		self.score={}
+		
 		if(type==0):
 			self.rank(Index,query)
 
