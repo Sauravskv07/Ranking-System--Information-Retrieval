@@ -26,7 +26,7 @@ def main():
 
 		if(choice==0 or choice==1):
 			
-			scores=R_Pro.rank_advance(index,bi_index,D.docs,query,choice)
+			scores=R_Pro.rank_advance(index,bi_index,query,choice)
 
 			scores_list=sorted(scores.items(), key=itemgetter(1), reverse= True)
 
@@ -34,7 +34,7 @@ def main():
 
 			for doc_id,score in scores_list[0:k]:
 				print(doc_id,"    ",score)
-
+				print(D.get_doc_text(doc_id))
 
 		else:
 			print("Invalid Entry")

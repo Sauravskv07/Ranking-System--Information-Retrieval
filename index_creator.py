@@ -6,7 +6,11 @@ nlp = English()
 class Docs:
 
 	def __init__(self):
+		
 		self.docs=[]
+		self.docs_ids=[]
+		self.docs_text=[]
+
 		self.num_docs=0
 		print("Docs Initialized")
 
@@ -51,24 +55,33 @@ class Docs:
 
 			if(doc_status==1 and docs[i]=='<' and docs[i+1]=='/' and docs[i+2]=='d' and docs[i+3]=='o' and docs[i+4]=='c' and docs[i+5]=='>'):
 				doc=doc+"</doc>"
+
+				self.docs_text.append(doc)
+
 				doc=self.clean_doc(doc)
-				self.push((doc_id,nlp(doc)))
+
+				self.push(nlp(doc))
+				
+				self.docs_ids.append(doc_id)
+
 				self.num_docs+=1
+				
 				doc_id+=1
+				
 				doc_status=0
+				
 				doc=""
 
 			if(doc_status==1):
-				doc=doc+docs[i]
+				doc=doc + docs[i]
 						
 
-		return self.docs
-
-	def get_doc(self,doc_id):
-		return self.docs[doc_id][1]
+	def get_doc_text(self,doc_id):
+		return self.docs_text[doc_id]
 
 class Index:
 	def __init__(self):
+
 		self.index={}
 		self.idf={}
 		self.bi_index={}
@@ -77,9 +90,9 @@ class Index:
 
 	def generate_index(self,Doc):
 		#function to generate the inverted index
-		for doc_id,doc in Doc.docs:
+		for doc_id in Doc.docs_ids:
 			#print("Doc ID: ",doc_id)
-			for token in doc:
+			for token in Doc.docs[doc_id]:
 				if(self.index.get(token.text)!=None):
 					if(self.index[token.text].get(doc_id)!=None):
 						self.index[token.text][doc_id]+=1
@@ -113,9 +126,8 @@ class Bi_Index:
 
 	def generate_bi_index(self,Doc):
 		#function to generate the inverted index
-		for doc_id,doc in Doc.docs:
-			len_doc=len(doc)
-			for bi_term in zip(doc[0:-1],doc[1:]):
+		for doc_id in Doc.docs_ids:
+			for bi_term in zip(Doc.docs[doc_id][0:-1],Doc.docs[doc_id][1:]):
 				if(self.bi_index.get((bi_term[0].text,bi_term[1].text))!=None):
 					if(self.bi_index[(bi_term[0].text,bi_term[1].text)].get(doc_id)!=None):
 						self.bi_index[(bi_term[0].text,bi_term[1].text)][doc_id]+=1

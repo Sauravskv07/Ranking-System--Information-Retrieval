@@ -6,7 +6,7 @@ class Ranker:
 		self.score={}
 		print("Let's rank some queries")
 
-	def rank(self,Index,docs,query):
+	def rank(self,Index,query):
 
 		term_count={}
 
@@ -48,16 +48,16 @@ class Ranker:
 			if(n_factor!=0):
 				self.score[doc_id]/=n_factor
 
-	def rank_advance(self,Index,Bi_index,docs,query,type):
+	def rank_advance(self,Index,Bi_index,query,type):
 
 		if(type==0):
-			self.rank(Index,docs,query)
+			self.rank(Index,query)
 
 		else:
 
 			query=QueryCorrector().query_corrector(query,Index.index)
 
-			self.rank(Index,docs,query)			
+			self.rank(Index,query)			
 		
 			bi_term_count={}
 
