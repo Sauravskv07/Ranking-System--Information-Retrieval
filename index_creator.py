@@ -1,6 +1,11 @@
 import math
 from spacy.lang.en import English
 from tqdm import tqdm
+try:
+    import cPickle as pickle
+except ImportError:  # python 3.x
+    import pickle
+
 nlp = English()
 
 #class Docs for implementation of parsing of docs, cleaning of docs, population of docs object.
@@ -146,7 +151,7 @@ class Bi_Index:
 					self.bi_index[(bi_term[0].text,bi_term[1].text)]={doc_id:1}
 
 		print("Biword Index Generated")
-
+		
 		self.calculate_bi_idf(Doc)
 
 	#function to calculate tf-score
@@ -166,9 +171,42 @@ class Bi_Index:
 
 
 
+def main():
+
+	D=Docs()
+	
+	D.populate("wiki_09_AN")
+
+	index=Index()
+
+	index.generate_index(D)
+
+	bi_index=Bi_Index()
+	
+	bi_index.generate_bi_index(D)
+
+	print("Saving Docs Object")
+
+	with open('docs.p','wb') as fp:
+		pickle.dump(D, fp, protocol=pickle.HIGHEST_PROTOCOL)
+
+	print("Docs Object Saved")
 
 
+	print("Saving Inverted Index")
+
+	with open('index.p', 'wb') as fp:
+		pickle.dump(index, fp, protocol=pickle.HIGHEST_PROTOCOL)
+
+	print("Inverted Indexed Successfully saved")
 
 
+	print("Saving Inverted bi-word Index")
 
-		
+	with open('bi_index.p','wb') as fp:
+		pickle.dump(bi_index, fp, protocol=pickle.HIGHEST_PROTOCOL)
+
+	print("Inverted Bi-word Index Saved")
+
+if __name__ == "__main__":		
+	main()
