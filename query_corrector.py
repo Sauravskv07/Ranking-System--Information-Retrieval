@@ -4,6 +4,7 @@ class QueryCorrector:
 		print("Initialized Query Corrector..")
 		self.mem = {}
 
+	#function to calculate levenstein distance
 	def levenshtein(self,s, t):
 		if (s == ""):
 			return len(t)
@@ -36,6 +37,7 @@ class QueryCorrector:
     
 		return res
 
+	#function to implement spelling correction in a query
 	def query_corrector(self,query,index):
 
 		flag=0

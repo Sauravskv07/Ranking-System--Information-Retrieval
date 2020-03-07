@@ -2,7 +2,7 @@ import vector_ranker as vr
 import index_creator as idx
 from operator import itemgetter
 
-
+#menu driven interface of the search engine
 def main():
 	D=idx.Docs()
 	

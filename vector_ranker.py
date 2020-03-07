@@ -1,11 +1,14 @@
 import math
 from query_corrector import QueryCorrector
 
+#class to implement vector ranking model
 class Ranker:
+
 	def __init__(self):
-		self.score={}
+		self.score={}#dictionary to store scores of docs corresponding to the query
 		print("Let's rank some queries")
 
+	#function to assign rank via vanilla ranking model
 	def rank(self,Index,query):
 
 		term_count={}
@@ -48,6 +51,7 @@ class Ranker:
 			if(n_factor!=0):
 				self.score[doc_id]/=n_factor
 
+	#function to rank based on bi word index and spelling correction
 	def rank_advance(self,Index,Bi_index,query,type):
 
 		self.score={}

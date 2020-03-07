@@ -3,20 +3,22 @@ from spacy.lang.en import English
 from tqdm import tqdm
 nlp = English()
 
+#class Docs for implementation of parsing of docs, cleaning of docs, population of docs object.
 class Docs:
-
 	def __init__(self):
 		
-		self.docs=[]
-		self.docs_ids=[]
-		self.docs_text=[]
+		self.docs=[]#to store the nlp objects of docs, tokenized
+		self.docs_ids=[] # to store the ids of the docs
+		self.docs_text=[] # to store the text corresponding to each docs.
 
-		self.num_docs=0
+		self.num_docs=0 # to store the net number of docs processed
 		print("Docs Initialized")
 
+	#function to push a new doc into the doc array
 	def push(self,doc):
 		self.docs.append(doc)
 
+	#to clean the doc of all tags for index creation
 	def clean_doc(self,doc):
 		new_doc=""
 		tag_status=0
@@ -37,6 +39,7 @@ class Docs:
 
 		return new_doc
 
+	#to populate the Docs object with all the docs given in the filename
 	def populate(self,filename):
 		#read the file , parse it and populate itself
 		docs_file = open(filename, "rt") # opening the file to read different docs
@@ -79,15 +82,17 @@ class Docs:
 	def get_doc_text(self,doc_id):
 		return self.docs_text[doc_id]
 
+#class for implementation of single term indexes
 class Index:
 	def __init__(self):
 
-		self.index={}
-		self.idf={}
-		self.bi_index={}
-		self.bi_idf={}
+		self.index={} # dictionary to store the index
+		self.idf={} # dictionary to store the idf value corresponding to each term
+		self.bi_index={} # dictionary to store the bi-word indexed
+		self.bi_idf={} #dictionary to store the idf values corresponding to each bi word
 		print("Inverted Index Initialized..")
 
+	#function to generate term index
 	def generate_index(self,Doc):
 		#function to generate the inverted index
 		for doc_id in Doc.docs_ids:
@@ -105,11 +110,13 @@ class Index:
 
 		self.calculate_idf(Doc)
 
+	#function to calculate idf.
 	def calculate_idf(self,Doc):
 		#function to populate idf
 		for term in self.index.keys():
 			self.idf[term]=math.log(Doc.num_docs/len(self.index[term].keys()))
 
+	#function to calculate log term frequency of term in each doc
 	def calculate_tf(self,term,doc_id):
 		#function to calculate tf-score
 		if(self.index.get(term)!=None and self.index[term].get(doc_id)!=None):
@@ -117,15 +124,17 @@ class Index:
 		else:
 			return 0
 
+#class to implement bi word indexes
 class Bi_Index:
 
 	def __init__(self):
-		self.bi_index={}
-		self.bi_idf={}
+		self.bi_index={}#dictionary to store bi word
+		self.bi_idf={}#dictionary to store idf value of each bi word
 		print("Biword Inverted Index Initialized..")
 
+	#function to generate bi word indexes
 	def generate_bi_index(self,Doc):
-		#function to generate the inverted index
+		
 		for doc_id in Doc.docs_ids:
 			for bi_term in zip(Doc.docs[doc_id][0:-1],Doc.docs[doc_id][1:]):
 				if(self.bi_index.get((bi_term[0].text,bi_term[1].text))!=None):
@@ -140,18 +149,18 @@ class Bi_Index:
 
 		self.calculate_bi_idf(Doc)
 
-
+	#function to calculate tf-score
 	def calculate_bi_tf(self,bi_term,doc_id):
-		#function to calculate tf-score
+		
 		if(self.bi_index.get(bi_term)!=None and self.bi_index[bi_term].get(doc_id)!=None):
 			return 1 + math.log(self.bi_index[bi_term][doc_id])
 		else:
 			return 0
 
 
-
+	#function to populate idf
 	def calculate_bi_idf(self,Doc):
-		#function to populate idf
+		
 		for bi_term in self.bi_index.keys():
 			self.bi_idf[bi_term]=math.log(Doc.num_docs/len(self.bi_index[bi_term].keys()))
 
