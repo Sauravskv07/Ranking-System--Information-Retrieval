@@ -2,8 +2,8 @@
 A vector space ranking model with inverted index.
 
 # Library Requirements
-1. pip insall tqdm
-2. pip insatll -U spacy
+1. pip install tqdm
+2. pip install -U spacy
 
 # Instructions to run
 1. Enter "python3 master.py" in command line
